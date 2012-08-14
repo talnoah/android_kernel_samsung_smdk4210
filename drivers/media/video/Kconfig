@@ -529,6 +529,12 @@ config VIDEO_S5K5BAFX
 	depends on I2C && VIDEO_V4L2 && VIDEO_FIMC_MIPI
 	---help---
 	  This driver supports S5K5BAFX SoC camera module
+	  
+config VIDEO_S5K5BBGX
+	tristate "S5K5BBGX supporting camera driver"
+	depends on I2C && VIDEO_V4L2 && TARGET_LOCALE_NA
+	---help---
+	  This driver supports S5K5BBGX SoC camera module
 
 config VIDEO_S5K5CCGX_COMMON
 	tristate "S5K5CCGX supporting camera driver"

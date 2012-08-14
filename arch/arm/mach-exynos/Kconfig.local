@@ -19,6 +19,10 @@ config TARGET_LOCALE_P2EUR_TEMP
 
 config TARGET_LOCALE_P2TMO_TEMP
 	bool "P2TMO"
+config TARGET_LOCALE_NA
+	bool "NA"
+	help
+	Support North America Board
 
 config TARGET_LOCALE_EUR_U1_NFC
 	bool "Europe Open NFC"

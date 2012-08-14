@@ -158,7 +158,10 @@ struct max8997_muic_data {
 #endif /* CONFIG_MACH_U1CAMERA_BD */
 	void		(*jig_uart_cb) (int path);
 	int		(*host_notify_cb) (int enable);
-#if !defined(CONFIG_MACH_U1CAMERA_BD)
+#if defined(CONFIG_TARGET_LOCALE_NA)
+        int             gpio_uart_sel;
+#endif
+#if !defined(CONFIG_MACH_U1CAMERA_BD) && !defined(CONFIG_TARGET_LOCALE_NA)
 	int		gpio_usb_sel;
 #endif /* CONFIG_MACH_U1CAMERA_BD */
 	int		sw_path;

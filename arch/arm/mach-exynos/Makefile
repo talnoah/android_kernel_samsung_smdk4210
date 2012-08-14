@@ -69,10 +69,18 @@ obj-$(CONFIG_MACH_TRATS)		+= mach-trats.o sec-common.o sec-switch_max8997.o \
 ifeq ($(CONFIG_MACH_U1CAMERA_BD),y)
 obj-$(CONFIG_MACH_U1)			+= mach-u1cam.o
 else
+ifeq ($(CONFIG_MACH_U1_NA_SPR),y)
+obj-$(CONFIG_MACH_U1)			+= mach-u1-spr.o dev-c1-phone.o
+else
 obj-$(CONFIG_MACH_U1)			+= mach-u1.o
 endif
+endif
 obj-$(CONFIG_MACH_U1)			+= sec-common.o sec-switch_max8997.o
+ifeq ($(CONFIG_MACH_U1_NA_SPR),y)
+obj-$(CONFIG_MACH_U1_BD)        += u1-gpio-spr.o
+else
 obj-$(CONFIG_MACH_U1_BD)		+= u1-gpio.o board-gps-gsd4t.o
+endif
 obj-$(CONFIG_MACH_Q1_BD)		+= q1-gpio.o board-gps-bcm475x.o
 obj-$(CONFIG_MACH_U1CAMERA_BD)		+= u1camera-gpio.o board-gps-bcm475x.o
 obj-$(CONFIG_MACH_U1)			+= u1-wlan.o
@@ -83,6 +91,7 @@ obj-$(CONFIG_MACH_P8)			+= p8-gpio.o
 obj-$(CONFIG_MACH_P8LTE)		+= p8lte-gpio.o
 obj-$(CONFIG_MACH_P10)			+= board-p10-wlan.o board-gps-bcm475x.o
 obj-$(CONFIG_PANEL_U1)			+= u1-panel.o u1-panel_a2.o u1-panel_m2.o
+obj-$(CONFIG_PANEL_U1_NA_SPR)	        += u1-na-spr-panel.o
 obj-$(CONFIG_MACH_U1)			+= u1_regulator_consumer.o
 obj-$(CONFIG_MACH_PX)			+= u1_regulator_consumer.o
 obj-$(CONFIG_MACH_NURI)			+= mach-nuri.o
@@ -264,3 +273,4 @@ obj-$(CONFIG_EXYNOS4_DEV_TMU)           += dev-slp-tmu.o
 obj-$(CONFIG_QC_MODEM_MDM9X15)	+= mdm2.o mdm_common.o mdm_device.o
 obj-$(CONFIG_MSM_SUBSYSTEM_RESTART)	+= subsystem_notif.o subsystem_restart.o
 obj-$(CONFIG_MDM_HSIC_PM)		+= mdm_hsic_pm.o
+obj-$(CONFIG_WIMAX_CMC)			+= u1-wimax.o

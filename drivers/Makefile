@@ -128,6 +128,7 @@ obj-$(CONFIG_VIBETONZ)		+= motor/
 obj-$(CONFIG_SENSORS_CORE)	+= sensor/
 obj-$(CONFIG_SAMSUNG_MODULES)   += samsung/
 obj-$(CONFIG_PM_DEVFREQ)	+= devfreq/
+obj-$(CONFIG_SAMSUNG_PHONE_TTY) += dpram/
 obj-$(CONFIG_SAMSUNG_PHONE_SVNET) += svnet/
 obj-$(CONFIG_PHONE_IPC_SPI) += phone_svn/
 obj-$(CONFIG_ACCESSORY)		+= accessory/

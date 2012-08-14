@@ -1536,6 +1536,10 @@ static int m5mo_set_af(struct v4l2_subdev *sd, int val)
 			m5mo_set_lock(sd, val);
 		}
 
+#if defined(CONFIG_TARGET_LOCALE_NA)
+		if (state->focus.mode == FOCUS_MODE_AUTO || state->focus.mode == FOCUS_MODE_MACRO)
+		    state->focus.mode = state->focus.ui_mode;
+#endif
 	} else {
 		err = m5mo_writeb(sd, M5MO_CATEGORY_LENS,
 			M5MO_LENS_AF_START, val ? 0x02 : 0x00);
@@ -1570,10 +1574,18 @@ static int m5mo_set_af_mode(struct v4l2_subdev *sd, int val)
 retry:
 	switch (val) {
 	case FOCUS_MODE_AUTO:
+#if defined(CONFIG_TARGET_LOCALE_NA)
+		state->focus.ui_mode = val;
+		state->focus.mode_select = FOCUS_MODE_SELECT_NORMAL;
+#endif
 		mode = 0x00;
 		break;
 
 	case FOCUS_MODE_MACRO:
+#if defined(CONFIG_TARGET_LOCALE_NA)
+		state->focus.ui_mode = val;
+		state->focus.mode_select = FOCUS_MODE_SELECT_MACRO;
+#endif
 		mode = 0x01;
 		break;
 
@@ -1587,7 +1599,17 @@ retry:
 		break;
 
 	case FOCUS_MODE_TOUCH:
+#if defined(CONFIG_TARGET_LOCALE_NA)
+		if (state->focus.ui_mode == FOCUS_MODE_AUTO) {
+			state->focus.mode_select = FOCUS_MODE_SELECT_TOUCH_NORMAL;
 		mode = 0x04;
+		} else {
+			state->focus.mode_select = FOCUS_MODE_SELECT_TOUCH_MACRO;
+			mode = 0x01;
+		}
+#else
+		mode = 0x04;
+#endif
 		cancel = 0;
 		break;
 
@@ -1611,6 +1633,9 @@ retry:
 	}
 
 	cam_dbg("E, value %d\n", val);
+#if defined(CONFIG_TARGET_LOCALE_NA)
+	cam_dbg("E, mode_select %d\n", state->focus.mode_select);
+#endif
 
 	if (val == FOCUS_MODE_FACEDETECT) {
 		/* enable face detection */
@@ -1646,12 +1671,65 @@ retry:
 	if ((status & 0x01) != 0x00) {
 		cam_err("failed\n");
 		/*return -ETIMEDOUT;*/ /*This return value cause camera lock-up.*/
+#if defined(CONFIG_TARGET_LOCALE_NA)
+		return 0;
+#endif
 	}
 
 	cam_trace("X\n");
 	return 0;
 }
 
+#if defined(CONFIG_TARGET_LOCALE_NA)
+static int m5mo_set_af_mode_select(struct v4l2_subdev *sd)
+{
+	struct m5mo_state *state = to_state(sd);
+	u32 mode_select = 0;
+	int err;
+
+	cam_dbg("E, ui_mode = %d\n", state->focus.ui_mode);
+	cam_dbg("E, mode = %d\n", state->focus.mode);
+
+	if (state->focus.mode != FOCUS_MODE_TOUCH) {
+		switch (state->focus.ui_mode) {
+		case FOCUS_MODE_AUTO:
+			state->focus.mode_select = FOCUS_MODE_SELECT_NORMAL;
+			break;
+		case FOCUS_MODE_MACRO:
+			state->focus.mode_select = FOCUS_MODE_SELECT_MACRO;
+			break;
+		default:
+			cam_warn("invalid value, mode %d\n", state->focus.mode);
+		}
+	}
+
+	switch (state->focus.mode_select) {
+	case FOCUS_MODE_SELECT_NORMAL:
+		mode_select = 0x00;
+		break;
+	case FOCUS_MODE_SELECT_MACRO:
+		mode_select = 0x01;
+		break;
+	case FOCUS_MODE_SELECT_TOUCH_NORMAL:
+		mode_select = 0x03;
+		break;
+	case FOCUS_MODE_SELECT_TOUCH_MACRO:
+		mode_select = 0x04;
+		break;
+	default:
+		cam_warn("No need to set mode_select value, %d", state->focus.mode_select);
+		return 0;
+	}
+
+	cam_dbg("E, mode_select = %d\n", mode_select);
+
+	err = m5mo_writeb(sd, M5MO_CATEGORY_LENS, M5MO_LENS_AF_MODE_SELECT, mode_select);
+	CHECK_ERR(err);
+
+	cam_trace("X\n");
+	return 0;
+}
+#endif
 static int m5mo_set_touch_auto_focus(struct v4l2_subdev *sd, int val)
 {
 	struct m5mo_state *state = to_state(sd);
@@ -2021,6 +2099,9 @@ static int m5mo_s_ctrl(struct v4l2_subdev *sd, struct v4l2_control *ctrl)
 		break;
 
 	case V4L2_CID_CAMERA_SET_AUTO_FOCUS:
+#if defined(CONFIG_TARGET_LOCALE_NA)
+		err = m5mo_set_af_mode_select(sd);
+#endif
 		err = m5mo_set_af(sd, ctrl->value);
 		break;
 

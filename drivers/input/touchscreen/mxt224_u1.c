@@ -1336,7 +1336,7 @@ static void report_input_data(struct mxt224_data *data)
 
     /* tell cypress keypad we had finger activity */
     touchscreen_state_report(touch_is_pressed);
-
+	
 }
 
 void palm_recovery(void)

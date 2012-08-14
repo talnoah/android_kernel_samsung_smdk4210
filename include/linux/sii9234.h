@@ -32,7 +32,7 @@ struct sii9234_platform_data {
 	void (*hw_onoff)(bool on);
 	void (*hw_reset)(void);
 	void (*enable_vbus)(bool enable);
-#if defined(__MHL_NEW_CBUS_MSC_CMD__)
+#if defined(__MHL_NEW_CBUS_MSC_CMD__) && !defined(CONFIG_MACH_U1_NA_SPR)
 	void (*vbus_present)(bool on, int value);
 #else
 	void (*vbus_present)(bool on);
@@ -46,12 +46,16 @@ struct sii9234_platform_data {
 	struct i2c_client *hdmi_rx_client;
 	struct i2c_client *cbus_client;
 
+//extern void sii9234_mhl_detection_sched(void);
+
 #ifdef CONFIG_EXTCON
 	const char *extcon_name;
 #endif
 };
 
+#ifndef CONFIG_MACH_U1_NA_SPR
 extern u8 mhl_onoff_ex(bool onoff);
+#endif
 #endif
 
 #ifdef	CONFIG_SAMSUNG_WORKAROUND_HPD_GLANCE

@@ -124,7 +124,7 @@
 
 #if defined(CONFIG_TARGET_LOCALE_NAATT)
 #define TK_USE_4KEY_TYPE_ATT
-#elif defined(CONFIG_MACH_LOCALE_NA)
+#elif defined(CONFIG_TARGET_LOCALE_NA)
 #define TK_USE_4KEY_TYPE_NA
 #elif defined(CONFIG_MACH_M0) \
 	|| defined(CONFIG_MACH_C1) \

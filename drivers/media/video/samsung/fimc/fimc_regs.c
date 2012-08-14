@@ -1253,7 +1253,11 @@ int fimc_hwset_disable_capture(struct fimc_control *ctrl)
 
 void fimc_wait_disable_capture(struct fimc_control *ctrl)
 {
+#ifdef CONFIG_VIDEO_S5K5BBGX
+	unsigned long timeo = jiffies + 60; /* more 40 ms */
+#else
 	unsigned long timeo = jiffies + 40; /* timeout of 200 ms */
+#endif
 	u32 cfg;
 	if (!ctrl || !ctrl->cap)
 		return;

@@ -564,6 +564,13 @@ config SEC_DEV_JACK
 	default n
 	---help---
 	 This is Earjack detection driver for Samsung devices.
+	 
+config WIMAX_CMC
+	bool "SUB PMIC FOR WIMAX CMC"
+	depends on I2C
+	default n
+	help
+	  Sub PMIC for Raffaello
 
 config FM34_WE395
 	bool "Forte Media 2MIC driver"
@@ -616,6 +623,12 @@ config USBHUB_USB3503
 	depends on I2C
 	help
 	 Enables USB HUB USB3503
+	 
+config USBHUB_USB3803
+	bool "USB3803 USB HUB Driver"
+	depends on I2C
+	help
+	 Enables USB HUB USB3803
 
 config PN544
         bool "NXP PN544 NFC Controller Driver"

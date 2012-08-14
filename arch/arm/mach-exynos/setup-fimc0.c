@@ -69,6 +69,20 @@ void s3c_fimc0_cfg_gpio(struct platform_device *pdev)
 	s3c_gpio_cfgrange_nopull(EXYNOS4210_GPE0(0), 5, S3C_GPIO_SFN(3));
 #endif
 #endif
+#if defined(CONFIG_VIDEO_S5K5BBGX)
+	int i = 0;
+
+	/* CAM A port(b0010) : PCLK, VSYNC, HREF, DATA[0-4] */
+	for (i = 0; i < 8; i++) {
+		s3c_gpio_cfgpin(EXYNOS4210_GPJ0(i), S3C_GPIO_SFN(2));
+		s3c_gpio_setpull(EXYNOS4210_GPJ0(i), S3C_GPIO_PULL_NONE);
+	}
+	/* CAM A port(b0010) : DATA[5-7], CLKOUT(MIPI CAM also), FIELD */
+	for (i = 0; i < 5; i++) {
+		s3c_gpio_cfgpin(EXYNOS4210_GPJ1(i), S3C_GPIO_SFN(2));
+		s3c_gpio_setpull(EXYNOS4210_GPJ1(i), S3C_GPIO_PULL_NONE);
+	}
+#endif
 }
 
 int s3c_fimc_clk_on(struct platform_device *pdev, struct clk **clk)

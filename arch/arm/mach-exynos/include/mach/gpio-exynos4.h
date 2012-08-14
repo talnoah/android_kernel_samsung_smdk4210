@@ -214,7 +214,9 @@ enum exynos4212_gpio_number {
 #include "gpio-naples.h"
 #endif
 
-#if defined(CONFIG_MACH_U1) || defined(CONFIG_MACH_TRATS)
+#if defined(CONFIG_MACH_U1_NA_SPR)
+#include "gpio-u1-na-spr.h"
+#elif defined(CONFIG_MACH_U1) || defined(CONFIG_MACH_TRATS)
 #include "gpio-u1.h"
 #endif
 

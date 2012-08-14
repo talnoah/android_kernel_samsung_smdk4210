@@ -23,7 +23,11 @@ enum mic_type {
 struct mc1n2_platform_data {
 	void (*set_main_mic_bias)(bool on);
 	void (*set_sub_mic_bias)(bool on);
+#ifdef CONFIG_TARGET_LOCALE_NA
+	void (*set_adc_power_constraints)(int disabled);
+#else
 	int (*set_adc_power_constraints)(int disabled);
+#endif
 };
 
 #endif

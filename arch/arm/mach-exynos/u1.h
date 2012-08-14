@@ -9,6 +9,10 @@ extern struct ld9040_panel_data u1_panel_data;
 extern struct ld9040_panel_data u1_panel_data_a2;
 extern struct ld9040_panel_data u1_panel_data_m2;
 
+#ifdef CONFIG_WIMAX_CMC
+extern struct platform_device s3c_device_cmc732;
+#endif
+
 extern int s3c_gpio_slp_cfgpin(unsigned int pin, unsigned int config);
 extern int s3c_gpio_slp_setpull_updown(unsigned int pin, unsigned int config);
 

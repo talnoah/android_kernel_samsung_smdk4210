@@ -829,6 +829,10 @@ static int max8997_muic_attach_usb_type(struct max8997_muic_info *info, int adc)
 		return ret;
 	}
 
+#ifdef CONFIG_USBHUB_USB3803
+	/* setting usb hub in Diagnostic(hub) mode */
+	usb3803_set_mode(USB_3803_MODE_HUB);
+#endif /* CONFIG_USBHUB_USB3803 */
 	if (mdata->sw_path == CP_USB_MODE) {
 		info->cable_type = CABLE_TYPE_USB;
 		max8997_muic_set_usb_path(info, CP_USB_MODE);
@@ -1044,6 +1048,7 @@ static int max8997_muic_handle_attach(struct max8997_muic_info *info,
 				dev_err(info->dev, "%s: ADC err occured(CARDOCK)\n", __func__);
 			else
 				dev_warn(info->dev, "%s: ADC != CARDOCK, remove CARDOCK\n", __func__);
+
 
 			info->cable_type = CABLE_TYPE_NONE;
 
@@ -1622,9 +1627,15 @@ static int __devinit max8997_muic_probe(struct platform_device *pdev)
 		goto err_input;
 	}
 
+#ifdef CONFIG_TARGET_LOCALE_NA
+	if (info->muic_data && gpio_is_valid(info->muic_data->gpio_uart_sel)) {
+		CHECK_GPIO(info->muic_data->gpio_uart_sel, "UART_SEL");
+#endif
 #if !defined(CONFIG_MACH_U1CAMERA_BD)
+#ifndef CONFIG_TARGET_LOCALE_NA
 	if (info->muic_data && gpio_is_valid(info->muic_data->gpio_usb_sel)) {
 		CHECK_GPIO(info->muic_data->gpio_usb_sel, "USB_SEL");
+#endif /* CONFIG_TARGET_LOCALE_NA */
 
 		if (info->muic_data->cfg_uart_gpio)
 			info->muic_data->uart_path =
