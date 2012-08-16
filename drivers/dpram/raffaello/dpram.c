@@ -1222,10 +1222,11 @@ static int dpram_init_magic_num(void)
 #ifdef _ENABLE_ERROR_DEVICE
 void request_phone_reset(void)
 {
-    char buf[DPRAM_ERR_MSG_LEN];
+	return;
+	
+ /*   char buf[DPRAM_ERR_MSG_LEN];
     unsigned long flags;
 
-	/*Add for Gadui : Normal boot Magic - 0x54424D4E*/
     dpram_init_magic_num();
 
     memset((void *)buf, 0, sizeof (buf));
@@ -1251,7 +1252,7 @@ void request_phone_reset(void)
     local_irq_restore(flags);
 
     wake_up_interruptible(&dpram_err_wait_q);
-    kill_fasync(&dpram_err_async_q, SIGIO, POLL_IN);
+    kill_fasync(&dpram_err_async_q, SIGIO, POLL_IN);*/
 }
 #endif
 

@@ -373,17 +373,21 @@ static inline int check_gps_uart_op(void)
 	return gps_is_running;
 }
 
-#ifdef CONFIG_INTERNAL_MODEM_IF
+#if defined(CONFIG_INTERNAL_MODEM_IF) || defined(CONFIG_SAMSUNG_PHONE_TTY)
 static int check_idpram_op(void)
 {
 	/* This pin is high when CP might be accessing dpram */
+#ifdef CONFIG_MACH_U1_NA_SPR
+	int cp_int = __raw_readl(S5P_VA_GPIO2 + 0xC24) & 4;
+#else
 	int cp_int = gpio_get_value(GPIO_CP_AP_DPRAM_INT);
+#endif
 	if (cp_int != 0)
 		pr_info("%s cp_int is high.\n", __func__);
 	return cp_int;
 }
 #endif
-
+#ifndef CONFIG_MACH_U1_NA_SPR
 static atomic_t sromc_use_count;
 
 void set_sromc_access(bool access)
@@ -399,7 +403,7 @@ static inline int check_sromc_access(void)
 {
 	return atomic_read(&sromc_use_count);
 }
-
+#endif
 static int exynos4_check_operation(void)
 {
 	if (check_power_domain())
@@ -422,7 +426,7 @@ static int exynos4_check_operation(void)
 		return 1;
 #endif
 
-#ifdef CONFIG_INTERNAL_MODEM_IF
+#if defined(CONFIG_INTERNAL_MODEM_IF) || defined(CONFIG_SAMSUNG_PHONE_TTY)
 	if (check_idpram_op())
 		return 1;
 #endif
@@ -433,10 +437,12 @@ static int exynos4_check_operation(void)
 	if (exynos4_check_usb_op())
 		return 1;
 
+#ifndef CONFIG_MACH_U1_NA_SPR
 	if (check_sromc_access()) {
 		pr_info("%s: SROMC is in use!!!\n", __func__);
 		return 1;
 	}
+#endif
 
 	return 0;
 }
@@ -633,7 +639,7 @@ static int exynos4_enter_core0_lpa(struct cpuidle_device *dev,
 #endif
 	local_irq_disable();
 
-#ifdef CONFIG_INTERNAL_MODEM_IF
+#if defined(CONFIG_INTERNAL_MODEM_IF) || defined(CONFIG_SAMSUNG_PHONE_TTY)
 	gpio_set_value(GPIO_PDA_ACTIVE, 0);
 #endif
 
@@ -729,7 +735,7 @@ early_wakeup:
 
 	if (log_en)
 		pr_info("---lpa\n");
-#ifdef CONFIG_INTERNAL_MODEM_IF
+#if defined(CONFIG_INTERNAL_MODEM_IF) || defined(CONFIG_SAMSUNG_PHONE_TTY)
 	gpio_set_value(GPIO_PDA_ACTIVE, 1);
 #endif
 
