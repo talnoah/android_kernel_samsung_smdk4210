@@ -38,4 +38,10 @@ struct k3dh_acceldata {
 #define K3DH_IOCTL_READ_ACCEL_XYZ	_IOR(K3DH_IOCTL_BASE, 8, \
 						struct k3dh_acceldata)
 #define K3DH_IOCTL_SET_ENABLE		_IOW(K3DH_IOCTL_BASE, 9, int)
+
+#ifdef CONFIG_TARGET_LOCALE_NA
+struct k3dh_platform_data {
+	int gpio_acc_int;  /* gpio for k3dh int output */
+};
+#endif
 #endif

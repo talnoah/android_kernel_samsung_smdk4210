@@ -28,7 +28,11 @@
 #endif
 
 static unsigned long pwm_val = 50; /* duty in percent */
+#ifdef CONFIG_MACH_U1_NA_SPR
+static int pwm_duty = 38000; /* duty value, 50667=100% 38000=50%, 25334=0% */
+#else
 static int pwm_duty = 28230; /* duty value, 37640=100% 28230=50%, 18820=0% */
+#endif
 
 struct vibrator_drvdata {
 	struct max8997_motor_data *pdata;
@@ -245,16 +249,27 @@ ssize_t pwm_val_store(struct device *dev,
 
 	pr_info("[VIB] %s: pwm_val=%lu\n", __func__, pwm_val);
 
-	pwm_duty = (pwm_val * 18820) / 100 + 18820;
+#ifdef CONFIG_MACH_U1_NA_SPR
+        pwm_duty = (pwm_val * 25334) / 100 + 25334;
 
-	/* make sure new pwm duty is in range */
+        /* make sure new pwm duty is in range */
+	if(pwm_duty > 50667) {
+		pwm_duty = 50667;
+	}
+	else if (pwm_duty < 25334) {
+		pwm_duty = 25334;
+	}
+#else
+        pwm_duty = (pwm_val * 18820) / 100 + 18820;
+
+        /* make sure new pwm duty is in range */
 	if(pwm_duty > 37640) {
 		pwm_duty = 37640;
 	}
 	else if (pwm_duty < 18820) {
 		pwm_duty = 18820;
 	}
-
+#endif
 	pr_info("[VIB] %s: pwm_duty=%d\n", __func__, pwm_duty);
 
 	return size;

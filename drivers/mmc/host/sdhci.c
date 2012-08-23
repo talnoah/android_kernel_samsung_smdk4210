@@ -13,6 +13,7 @@
  *     - JMicron (hardware and technical support)
  */
 
+
 #include <linux/delay.h>
 #include <linux/highmem.h>
 #include <linux/io.h>
@@ -23,11 +24,13 @@
 
 #include <linux/leds.h>
 
+
 #include <linux/mmc/mmc.h>
 #include <linux/mmc/host.h>
 #include <linux/mmc/card.h>
 
 #include "sdhci.h"
+
 
 #include <linux/gpio.h>
 
@@ -42,6 +45,7 @@
 #define SDHCI_USE_LEDS_CLASS
 #endif
 #endif
+
 
 #define MAX_TUNING_LOOP 40
 
@@ -205,6 +209,7 @@ static void sdhci_reset(struct sdhci_host *host, u8 mask)
 		timeout--;
 		mdelay(1);
 	}
+
 
 	if (host->ops->platform_reset_exit)
 		host->ops->platform_reset_exit(host, mask);
@@ -419,6 +424,7 @@ static char *sdhci_kmap_atomic(struct scatterlist *sg, unsigned long *flags)
 	local_irq_save(*flags);
 	return kmap_atomic(sg_page(sg), KM_BIO_SRC_IRQ) + sg->offset;
 }
+
 
 static void sdhci_kunmap_atomic(void *buffer, unsigned long *flags)
 {
@@ -647,16 +653,18 @@ static u8 sdhci_calc_timeout(struct sdhci_host *host, struct mmc_command *cmd)
 		target_timeout = cmd->cmd_timeout_ms * 1000;
 	else {  
 	/* patch added for divide by zero once issue for P2_USA_TMO project. */
-		#ifndef CONFIG_TARGET_LOCALE_P2TMO_TEMP
+#if !defined(CONFIG_TARGET_LOCALE_P2TMO_TEMP)
 		target_timeout = data->timeout_ns / 1000 +
 			data->timeout_clks / host->clock;
-	        #else
+#else
+#ifndef CONFIG_WIMAX_CMC
 		if (host!=NULL)
                 target_timeout = data->timeout_ns / 1000 +
                         data->timeout_clks / host->clock;
 		else
 			return 0;
-	        #endif
+#endif
+#endif
              }
 	if (host->quirks & SDHCI_QUIRK_DATA_TIMEOUT_USES_SDCLK)
 		host->timeout_clk = host->clock / 1000;
@@ -1060,6 +1068,7 @@ static void sdhci_finish_command(struct sdhci_host *host)
 		}
 	}
 
+
 	host->cmd->error = 0;
 
 	/* Finished CMD23, now send actual command. */
@@ -1098,6 +1107,7 @@ static void sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
 
 	if (clock == 0)
 		goto out;
+
 
 	if (host->version >= SDHCI_SPEC_300) {
 		/*
@@ -1168,6 +1178,7 @@ static void sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
 		timeout--;
 		mdelay(1);
 	}
+
 
 	clk |= SDHCI_CLOCK_CARD_EN;
 	sdhci_writew(host, clk, SDHCI_CLOCK_CONTROL);
@@ -1451,6 +1462,8 @@ static void sdhci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
 		}
 
 
+
+
 		/* Reset SD Clock Enable */
 		clk = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
 		clk &= ~SDHCI_CLOCK_CARD_EN;
@@ -1474,6 +1487,7 @@ static void sdhci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
 				ctrl_2 |= SDHCI_CTRL_UHS_DDR50;
 			sdhci_writew(host, ctrl_2, SDHCI_HOST_CONTROL2);
 		}
+
 
 		/* Re-enable SD Clock */
 		clock = host->clock;
@@ -1650,6 +1664,7 @@ static int sdhci_start_signal_voltage_switch(struct mmc_host *mmc,
 			}
 		}
 
+
 		/*
 		 * If we are here, that means the switch to 1.8V signaling
 		 * failed. We power cycle the card, and retry initialization
@@ -1730,7 +1745,11 @@ static int sdhci_execute_tuning(struct mmc_host *mmc, u32 opcode)
 		if (!tuning_loop_counter && !timeout)
 			break;
 
+#ifdef CONFI_WIMAX_CMC
+		cmd.opcode = MMC_SEND_TUNING_BLOCK;
+#else
 		cmd.opcode = opcode;
+#endif
 		cmd.arg = 0;
 		cmd.flags = MMC_RSP_R1 | MMC_CMD_ADTC;
 		cmd.retries = 0;
@@ -1975,6 +1994,7 @@ static void sdhci_tasklet_finish(unsigned long param)
 		sdhci_reset(host, SDHCI_RESET_DATA);
 	}
 
+
 	host->mrq = NULL;
 	host->cmd = NULL;
 	host->data = NULL;
@@ -2067,6 +2087,7 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask)
 	}
 
 
+
 	if (host->cmd->error) {
 		tasklet_schedule(&host->finish_tasklet);
 		return;
@@ -2126,6 +2147,7 @@ static void sdhci_show_adma_error(struct sdhci_host *host)
 #else
 static void sdhci_show_adma_error(struct sdhci_host *host) { }
 #endif
+
 
 static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
 {
@@ -2242,6 +2264,7 @@ static irqreturn_t sdhci_irq(int irq, void *dev_id)
 		goto out;
 	}
 
+
 	DBG("*** %s got interrupt: 0x%08x\n",
 		mmc_hostname(host->mmc), intmask);
 
@@ -2327,6 +2350,7 @@ int sdhci_suspend_host(struct sdhci_host *host, pm_message_t state)
 			host->tuning_count * HZ);
 	}
 
+
 	if (host->mmc->pm_flags & MMC_PM_IGNORE_SUSPEND_RESUME) {
 		host->mmc->pm_flags |= MMC_PM_KEEP_POWER;
 		pr_info("%s : Enter WIFI suspend\n", __func__);
@@ -2358,6 +2382,7 @@ int sdhci_resume_host(struct sdhci_host *host)
 {
 	int ret;
 
+
 	if (host->vmmc && !regulator_is_enabled(host->vmmc)) {
 #ifdef CONFIG_MIDAS_COMMON
 		if (host->ops->set_power)
@@ -2368,6 +2393,7 @@ int sdhci_resume_host(struct sdhci_host *host)
 			return ret;
 		pr_info("%s : MMC Card ON\n", __func__);
 	}
+
 
 
 	if (host->flags & (SDHCI_USE_SDMA | SDHCI_USE_ADMA)) {
@@ -2653,6 +2679,7 @@ int sdhci_add_host(struct sdhci_host *host)
 	else if (caps[1] & SDHCI_SUPPORT_SDR50)
 		mmc->caps |= MMC_CAP_UHS_SDR50;
 
+
 	if (caps[1] & SDHCI_SUPPORT_DDR50)
 		mmc->caps |= MMC_CAP_UHS_DDR50;
 
@@ -2752,6 +2779,7 @@ int sdhci_add_host(struct sdhci_host *host)
 			mmc->caps |= MMC_CAP_MAX_CURRENT_200;
 	}
 
+
 	mmc->ocr_avail = ocr_avail;
 	mmc->ocr_avail_sdio = ocr_avail;
 	if (host->ocr_avail_sdio)
@@ -2770,6 +2798,7 @@ int sdhci_add_host(struct sdhci_host *host)
 			"support voltages.\n", mmc_hostname(mmc));
 		return -ENODEV;
 	}
+
 
 	spin_lock_init(&host->lock);
 
@@ -2885,6 +2914,7 @@ int sdhci_add_host(struct sdhci_host *host)
 	sdhci_dumpregs(host);
 #endif
 
+
 #ifdef SDHCI_USE_LEDS_CLASS
 	snprintf(host->led_name, sizeof(host->led_name),
 		"%s::", mmc_hostname(mmc));
@@ -2945,6 +2975,7 @@ void sdhci_remove_host(struct sdhci_host *host, int dead)
 		spin_unlock_irqrestore(&host->lock, flags);
 	}
 
+
 	sdhci_disable_card_detection(host);
 
 	mmc_remove_host(host->mmc);
@@ -2980,6 +3011,7 @@ void sdhci_remove_host(struct sdhci_host *host, int dead)
 	host->adma_desc = NULL;
 	host->align_buffer = NULL;
 }
+
 
 EXPORT_SYMBOL_GPL(sdhci_remove_host);
 

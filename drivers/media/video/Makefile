@@ -218,5 +218,6 @@ EXTRA_CFLAGS += -Idrivers/media/dvb/dvb-core
 EXTRA_CFLAGS += -Idrivers/media/dvb/frontends
 EXTRA_CFLAGS += -Idrivers/media/common/tuners
 
+ifneq ($(CONFIG_MACH_U1_NA_SPR),y)
 obj-$(CONFIG_SAMSUNG_MHL)	+= mhl/
-
+endif

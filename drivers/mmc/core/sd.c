@@ -406,7 +406,83 @@ out:
 
 	return err;
 }
+#ifdef CONFIG_WIMAX_CMC
+static int sd_select_driver_type(struct mmc_card *card, u8 *status)
+{
+	int host_drv_type = 0, card_drv_type = 0;
 
+
+	int err;
+
+	/*
+	 * If the host doesn't support any of the Driver Types A,C or D,
+
+	 * default Driver Type B is used.
+	 */
+	if (!(card->host->caps & (MMC_CAP_DRIVER_TYPE_A | MMC_CAP_DRIVER_TYPE_C
+	    | MMC_CAP_DRIVER_TYPE_D)))
+		return 0;
+
+
+
+
+
+
+
+
+
+
+	if (card->host->caps & MMC_CAP_DRIVER_TYPE_A) {
+		host_drv_type = MMC_SET_DRIVER_TYPE_A;
+
+		if (card->sw_caps.sd3_drv_type & SD_DRIVER_TYPE_A)
+			card_drv_type = MMC_SET_DRIVER_TYPE_A;
+
+		else if (card->sw_caps.sd3_drv_type & SD_DRIVER_TYPE_B)
+			card_drv_type = MMC_SET_DRIVER_TYPE_B;
+
+		else if (card->sw_caps.sd3_drv_type & SD_DRIVER_TYPE_C)
+			card_drv_type = MMC_SET_DRIVER_TYPE_C;
+
+
+
+
+
+
+	} else if (card->host->caps & MMC_CAP_DRIVER_TYPE_C) {
+		host_drv_type = MMC_SET_DRIVER_TYPE_C;
+		if (card->sw_caps.sd3_drv_type & SD_DRIVER_TYPE_C)
+			card_drv_type = MMC_SET_DRIVER_TYPE_C;
+	} else if (!(card->host->caps & MMC_CAP_DRIVER_TYPE_D)) {
+		/*
+		 * If we are here, that means only the default driver type
+		 * B is supported by the host.
+		 */
+
+
+		host_drv_type = MMC_SET_DRIVER_TYPE_B;
+		if (card->sw_caps.sd3_drv_type & SD_DRIVER_TYPE_B)
+			card_drv_type = MMC_SET_DRIVER_TYPE_B;
+		else if (card->sw_caps.sd3_drv_type & SD_DRIVER_TYPE_C)
+			card_drv_type = MMC_SET_DRIVER_TYPE_C;
+
+	}
+
+	err = mmc_sd_switch(card, 1, 2, card_drv_type, status);
+	if (err)
+		return err;
+
+	if ((status[15] & 0xF) != card_drv_type) {
+		printk(KERN_WARNING "%s: Problem setting driver strength!\n",
+			mmc_hostname(card->host));
+		return 0;
+	}
+
+	mmc_set_driver_type(card->host, host_drv_type);
+
+	return 0;
+}
+#else
 static int sd_select_driver_type(struct mmc_card *card, u8 *status)
 {
 	int host_drv_type = SD_DRIVER_TYPE_B;
@@ -470,7 +546,7 @@ static int sd_select_driver_type(struct mmc_card *card, u8 *status)
 
 	return 0;
 }
-
+#endif
 static int sd_set_bus_speed_mode(struct mmc_card *card, u8 *status)
 {
 	unsigned int bus_speed = 0, timing = 0;
@@ -934,7 +1010,11 @@ static int mmc_sd_init_card(struct mmc_host *host, u32 ocr,
 	if (!mmc_host_is_spi(host)) {
 		err = mmc_send_relative_addr(host, &card->rca);
 		if (err)
+#ifdef CONFIG_WIMAX_CMC
+			return err;
+#else
 			goto free_card;
+#endif
 
 		mmc_set_bus_mode(host, MMC_BUSMODE_PUSHPULL);
 	}
@@ -942,7 +1022,11 @@ static int mmc_sd_init_card(struct mmc_host *host, u32 ocr,
 	if (!oldcard) {
 		err = mmc_sd_get_csd(host, card);
 		if (err)
+#ifdef CONFIG_WIMAX_CMC
+			return err;
+#else
 			goto free_card;
+#endif
 
 		mmc_decode_cid(card);
 	}
@@ -953,7 +1037,11 @@ static int mmc_sd_init_card(struct mmc_host *host, u32 ocr,
 	if (!mmc_host_is_spi(host)) {
 		err = mmc_select_card(card);
 		if (err)
+#ifdef CONFIG_WIMAX_CMC
+			return err;
+#else
 			goto free_card;
+#endif
 	}
 
 	err = mmc_sd_setup_card(host, card, oldcard != NULL);

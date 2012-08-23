@@ -53,6 +53,10 @@ struct sii9234_platform_data {
 #endif
 };
 
+#ifdef CONFIG_TARGET_LOCALE_NA
+extern void sii9234_mhl_detection_sched(void);
+#endif
+
 #ifndef CONFIG_MACH_U1_NA_SPR
 extern u8 mhl_onoff_ex(bool onoff);
 #endif

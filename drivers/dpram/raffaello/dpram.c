@@ -3072,7 +3072,7 @@ static int multipdp_init(void)
         { .id = 1, .ifname = "ttyCSD" },
         { .id = 7, .ifname = "ttyCDMA" },
         { .id = 29, .ifname = "ttyCPLOG" },
-        { .id = 31, .ifname = "loopback" },
+       // { .id = 31, .ifname = "loopback" },
 
     };
 
