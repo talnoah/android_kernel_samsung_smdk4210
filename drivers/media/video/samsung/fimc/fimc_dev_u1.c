@@ -482,8 +482,10 @@ static inline void fimc_irq_cap(struct fimc_control *ctrl)
 	if (pdata->hw_ver >= 0x51) {
 		pp = fimc_hwget_before_frame_count(ctrl);
 		if (cap->cnt < 20) {
+			#ifndef PRODUCT_SHIP
 			printk(KERN_INFO "%s[%d], fimc%d, cnt[%d]\n", __func__,
 							pp, ctrl->id, cap->cnt);
+			#endif
 			cap->cnt++;
 		}
 		if (pp == 0 || cap->cnt == 1) {

@@ -532,10 +532,12 @@ static void mxt224_ta_probe(bool ta_status)
 		size_one = 1;
 		write_mem(copy_data, obj_address + (u16) register_address,
 			  size_one, &value);
+#ifndef PRODUCT_SHIP
 		read_mem(copy_data, obj_address + (u16) register_address,
 			 (u8) size_one, &val);
 		printk(KERN_ERR "[TSP]TA_probe MXT224E T%d Byte%d is %d\n", 48,
 		       register_address, val);
+#endif
 		/* #endif */
 		if (ta_status)
 			write_config(copy_data, PROCG_NOISESUPPRESSION_T48,
@@ -548,20 +550,24 @@ static void mxt224_ta_probe(bool ta_status)
 			value = copy_data->blen_charging_e;
 			write_mem(copy_data, obj_address + 34, size_one,
 				  &value);
+#ifndef PRODUCT_SHIP
 			read_mem(copy_data, obj_address + 34, (u8) size_one,
 				 &val);
 			printk(KERN_DEBUG
 			       "[TSP]TA_probe MXT224E T%d Byte%d is %d\n", 48,
 			       34, val);
+#endif
 
 			value = 40;
 			write_mem(copy_data, obj_address + 35, size_one,
 				  &value);
+#ifndef PRODUCT_SHIP
 			read_mem(copy_data, obj_address + 35, (u8) size_one,
 				 &val);
 			printk(KERN_DEBUG
 			       "[TSP]TA_probe MXT224E T%d Byte%d is %d\n", 48,
 			       35, val);
+#endif
 
 			value = 240;
 			write_mem(copy_data, obj_address + 43, size_one,
@@ -592,10 +598,12 @@ static void mxt224_ta_probe(bool ta_status)
 		value = calcfg_en;
 		write_mem(copy_data, obj_address + (u16) register_address,
 			  size_one, &value);
+#ifndef PRODUCT_SHIP
 		read_mem(copy_data, obj_address + (u16) register_address,
 			 (u8) size_one, &val);
 		printk(KERN_ERR "[TSP]TA_probe MXT224E T%d Byte%d is %d\n", 48,
 		       register_address, val);
+#endif
 		/* #endif */
 	} else {
 		if (copy_data->freq_table.fherr_setting >= 1) {
@@ -641,8 +649,10 @@ static void mxt224_ta_probe(bool ta_status)
 			  size_one, &value);
 		read_mem(copy_data, obj_address + (u16) register_address,
 			 (u8) size_one, &val);
+#ifndef PRODUCT_SHIP
 		printk(KERN_ERR "[TSP]TA_probe MXT224 T%d Byte%d is %d\n", 9,
 		       register_address, val);
+#endif
 
 		value = noise_threshold;
 		register_address = 8;
@@ -1233,11 +1243,13 @@ static void report_input_data(struct mxt224_data *data)
 				MT_TOOL_FINGER, false);
 			data->fingers[i].z = TSP_STATE_INACTIVE;
 		/* logging */
+#ifndef PRODUCT_SHIP
 #ifdef __TSP_DEBUG
 			printk(KERN_ERR "[TSP] Up[%d] %4d,%4d\n", i,
 			       data->fingers[i].x, data->fingers[i].y);
 #else
 			printk(KERN_ERR "[TSP] Up[%d]\n", i);
+#endif
 #endif
 			continue;
 		}
@@ -1273,14 +1285,20 @@ static void report_input_data(struct mxt224_data *data)
 		/* logging */
 #ifdef __TSP_DEBUG
 		if (copy_data->touch_is_pressed_arr[i] == 1)
+#ifndef PRODUCT_SHIP
 			printk(KERN_ERR "[TSP] Dn[%d] %4d,%4d\n", i,
 			       data->fingers[i].x, data->fingers[i].y);
+#endif
 		if (copy_data->touch_is_pressed_arr[i] == 2)
+#ifndef PRODUCT_SHIP
 			printk(KERN_ERR "[TSP] Mv[%d] %4d,%4d\n", i,
 			       data->fingers[i].x, data->fingers[i].y);
+#endif
 #else
 		if (copy_data->touch_is_pressed_arr[i] == 1) {
+#ifndef PRODUCT_SHIP
 			printk(KERN_ERR "[TSP] Dn[%d]\n", i);
+#endif
 			copy_data->touch_is_pressed_arr[i] = 2;
 		}
 #endif
@@ -1877,10 +1895,12 @@ static irqreturn_t mxt224_irq_thread(int irq, void *ptr)
 			check_chip_calibration(1);
 	} while (!gpio_get_value(data->gpio_read_done));
 
+#if !defined(CONFIG_TARGET_LOCALE_NA)
 	if ((!copy_data->optiacl_gain) && (data->family_id != 0x81)) {
 		mxt224_optical_gain(QT_REFERENCE_MODE);
 		copy_data->optiacl_gain = 1;
 	}
+#endif
 
 	return IRQ_HANDLED;
 }

@@ -76,7 +76,9 @@ start_readmac:
 		ret = kernel_read(fp, 0, buf, 18);
 /* to prevent abnormal string display when mac address is displayed on the screen. */
 		buf[17] = '\0';
+#ifndef PRODUCT_SHIP
 		DHD_ERROR(("Read MAC : [%s] [%d] \r\n" , buf, strncmp(buf , "00:00:00:00:00:00" , 17)));
+#endif
 		if (strncmp(buf , "00:00:00:00:00:00" , 17) < 1) {
 			DHD_ERROR(("goto start_readmac \r\n"));
 			filp_close(fp, NULL);
@@ -340,8 +342,10 @@ int dhd_check_rdwr_macaddr(struct dhd_info *dhd, dhd_pub_t *dhdp,
 		 * is displayed on the screen.
 		 */
 		buf[17] = '\0';
+#ifndef PRODUCT_SHIP
 		DHD_ERROR(("Read MAC : [%s] [%d] \r\n", buf,
 			strncmp(buf, "00:00:00:00:00:00", 17)));
+#endif
 		if ((buf[0] == '\0') ||
 			(strncmp(buf, "00:00:00:00:00:00", 17) == 0)) {
 			g_imac_flag = MACADDR_COB_RANDOM;

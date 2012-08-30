@@ -138,7 +138,11 @@ static int touchled_cmd_reversed;
 
 static int touchkey_debug_count;
 static char touchkey_debug[104];
-
+static int touch_version;
+static int module_version;
+#ifdef CONFIG_TARGET_LOCALE_NA
+static int store_module_version;
+#endif
 #ifdef LED_LDO_WITH_REGULATOR
 static void change_touch_key_led_voltage(int vol_mv)
 {
@@ -290,18 +294,23 @@ static int touchkey_autocalibration(struct touchkey_i2c *tkey_i2c)
 		ret = i2c_touchkey_read(tkey_i2c->client, KEYCODE_REG, data, 6);
 
 		if ((data[5] & TK_BIT_AUTOCAL)) {
+			#ifndef PRODUCT_SHIP
 			pr_debug("[Touchkey] autocal Enabled\n");
+			#endif
 			break;
 		} else
+		#ifndef PRODUCT_SHIP
 			pr_debug("[Touchkey] autocal disabled, retry %d\n",
 			       retry);
+		#endif
 
 		retry = retry + 1;
 	}
 
 	if (retry == 3)
+		#ifndef PRODUCT_SHIP
 		pr_debug("[Touchkey] autocal failed\n");
-
+		#endif
 	return count;
 }
 #endif

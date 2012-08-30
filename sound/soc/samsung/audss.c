@@ -110,10 +110,12 @@ void audss_reg_save(void)
 	audss.reg_saved = true;
 
 	pr_debug("%s: Successfully saved audss reg\n", __func__);
+#ifndef PRODUCT_SHIP
 	pr_info("%s: SRC[0x%x], DIV[0x%x], GATE[0x%x]\n", __func__,
 					audss.suspend_audss_clksrc,
 					audss.suspend_audss_clkdiv,
 					audss.suspend_audss_clkgate);
+#endif
 }
 
 void audss_reg_restore(void)
@@ -140,8 +142,9 @@ extern void print_epll_con0(void);
 void audss_clk_enable(bool enable)
 {
 	unsigned long flags;
-
+#ifndef PRODUCT_SHIP
 	pr_debug("%s: state %d\n", __func__, enable);
+#endif
 	spin_lock_irqsave(&lock, flags);
 
 	if (enable) {
@@ -178,11 +181,13 @@ void audss_clk_enable(bool enable)
 	defined(CONFIG_TARGET_LOCALE_KOR))
 	print_epll_con0();
 #endif
+#ifndef PRODUCT_SHIP
 	pr_info("%s(%d): SRC[0x%x], DIV[0x%x], GATE[0x%x]\n", __func__,
 						enable ? 1 : 0,
 						readl(S5P_CLKSRC_AUDSS),
 						readl(S5P_CLKDIV_AUDSS),
 						readl(S5P_CLKGATE_AUDSS));
+#endif
 exit_func:
 	spin_unlock_irqrestore(&lock, flags);
 

@@ -583,8 +583,9 @@ static int update_brightness(struct lcd_info *lcd, u8 force)
 		ret |= ld9040_set_elvss(lcd);
 
 		lcd->current_bl = lcd->bl;
-
+#ifndef PRODUCT_SHIP
 		dev_info(&lcd->ld->dev, "id=%d brightness=%d, bl=%d, candela=%d\n", pdata->lcdtype, brightness, lcd->bl, candela_table[lcd->bl]);
+#endif
 	}
 
 	mutex_unlock(&lcd->bl_lock);
@@ -993,9 +994,13 @@ void ld9040_early_suspend(struct early_suspend *h)
 {
 	struct lcd_info *lcd = container_of(h, struct lcd_info ,
 								early_suspend);
+#ifndef PRODUCT_SHIP
 	dev_info(&lcd->ld->dev, "+%s\n", __func__);
+#endif
 	ld9040_power(lcd, FB_BLANK_POWERDOWN);
+#ifndef PRODUCT_SHIP
 	dev_info(&lcd->ld->dev, "-%s\n", __func__);
+#endif
 
 	return ;
 }

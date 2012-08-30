@@ -354,8 +354,10 @@ static void i2s_txctrl(struct i2s_dai *i2s, int on, int stream)
 		}
 
 		if (!srp_active(i2s, IS_RUNNING)) {
+#ifndef PRODUCT_SHIP
 			printk(KERN_DEBUG
 				"%s: Turn Off - spr is no active\n", __func__);
+#endif
 			con |=  CON_TXCH_PAUSE;
 
 			if (any_rx_active(i2s))

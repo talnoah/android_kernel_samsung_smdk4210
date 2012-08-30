@@ -254,9 +254,10 @@ int s3cfb_set_clock(struct s3cfb_global *ctrl)
 	cfg &= ~S3C_VIDCON0_CLKVAL_F(0xff);
 	cfg |= S3C_VIDCON0_CLKVAL_F(div - 1);
 	writel(cfg, ctrl->regs + S3C_VIDCON0);
-
+#ifndef PRODUCT_SHIP
 	dev_info(ctrl->dev, "parent clock: %d, vclk: %d, vclk div: %d\n",
 			src_clk, vclk, div);
+#endif
 
 	return 0;
 }

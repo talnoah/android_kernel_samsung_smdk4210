@@ -646,6 +646,9 @@ config ANDROID_WIP
 	  This enables 'work in progress' hacks for android issues.
 	  Please remove it later.
 
+config SEC_PRODUCT_SHIP
+  bool "Build with riff-raff PRODUCT_SHIP clauses"
+
 config COMPACTION_RETRY
 	bool "retry compaction once more after direct reclaim fails"
 	default n
@@ -1642,6 +1645,12 @@ config SEC_MODEM_U1_LGT
 	bool "U1 with mdm6600"
 	select CDMA_MODEM_MDM6600
 	select LINK_DEVICE_DPRAM
+
+config SEC_MODEM_U1_SPR
+	bool "U1 with qsc6085"
+	select CDMA_MODEM_QSC6085
+	select LINK_DEVICE_DPRAM
+	select INTERNAL_MODEM_IF
 
 config SEC_MODEM_GAIA
 	bool "GAIA with cmc221"

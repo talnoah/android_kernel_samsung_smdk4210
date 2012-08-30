@@ -652,6 +652,16 @@ ifeq ($(shell $(CONFIG_SHELL) $(srctree)/scripts/gcc-goto.sh $(CC)), y)
 	KBUILD_CFLAGS += -DCC_HAVE_ASM_GOTO
 endif
 
+ifeq ($(TARGET_BUILD_VARIANT),user)
+KBUILD_CFLAGS += -DTARGET_BUILD_USER
+else
+KBUILD_CFLAGS += -DTARGET_BUILD_ENG
+endif
+
+ifeq ($(CONFIG_SEC_PRODUCT_SHIP),true)
+KBUILD_CFLAGS += -DPRODUCT_SHIP
+endif
+
 # Add user supplied CPPFLAGS, AFLAGS and CFLAGS as the last assignments
 # But warn user when we do so
 warn-assign = \

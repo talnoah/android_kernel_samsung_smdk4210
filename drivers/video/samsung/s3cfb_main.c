@@ -660,8 +660,9 @@ void s3cfb_early_suspend(struct early_suspend *h)
 	struct platform_device *pdev = to_platform_device(info->dev);
 	struct s3cfb_global *fbdev[2];
 	int i, ret;
-
+#ifndef PRODUCT_SHIP
 	printk(KERN_INFO "+%s\n", __func__);
+#endif
 
 #ifdef CONFIG_FB_S5P_MIPI_DSIM
 #if defined(CONFIG_FB_S5P_S6E63M0)

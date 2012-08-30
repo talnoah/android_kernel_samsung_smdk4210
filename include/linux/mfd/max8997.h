@@ -161,7 +161,7 @@ struct max8997_muic_data {
 	int		(*host_notify_cb) (int enable);
 #if defined(CONFIG_TARGET_LOCALE_NA)
         int             gpio_uart_sel;
-#endif
+#endif /* CONFIG_TARGET_LOCALE_NA */
 #if !defined(CONFIG_MACH_U1CAMERA_BD) && !defined(CONFIG_TARGET_LOCALE_NA)
 	int		gpio_usb_sel;
 #endif /* CONFIG_MACH_U1CAMERA_BD */

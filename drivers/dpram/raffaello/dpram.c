@@ -3054,10 +3054,10 @@ static int pdp_activate(pdp_arg_t *pdp_arg, unsigned type, unsigned flags)
 
         {
             struct tty_driver * tty_driver = get_tty_driver_by_id(dev);
-
+#ifndef PRODUCT_SHIP
             LOGL(DL_INFO, "%s(id: %u) serial device is created.\n",
                     tty_driver->name, dev->id);
-
+#endif
         }
     }
 

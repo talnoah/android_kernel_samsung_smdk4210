@@ -220,12 +220,18 @@ static void print_active_locks(int type)
 		if (lock->flags & WAKE_LOCK_AUTO_EXPIRE) {
 			long timeout = lock->expires - jiffies;
 			if (timeout > 0)
+#ifndef PRODUCT_SHIP
 				pr_info("active wake lock %s, time left %ld\n",
 					lock->name, timeout);
+#endif
 			else if (print_expired)
+#ifndef PRODUCT_SHIP
 				pr_info("wake lock %s, expired\n", lock->name);
+#endif
 		} else {
+#ifndef PRODUCT_SHIP
 			pr_info("active wake lock %s\n", lock->name);
+#endif
 			if (!(debug_mask & DEBUG_EXPIRE))
 				print_expired = false;
 		}

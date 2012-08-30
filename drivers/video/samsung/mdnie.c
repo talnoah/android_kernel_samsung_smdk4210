@@ -171,9 +171,11 @@ void set_mdnie_value(struct mdnie_info *mdnie, u8 force)
 	if (SCENARIO_IS_DMB(mdnie->scenario)) {
 		idx = mdnie->scenario - DMB_NORMAL_MODE;
 		mdnie_send_sequence(mdnie, tune_dmb[mdnie->mode].seq);
+#ifndef PRODUCT_SHIP
 		dev_info(mdnie->dev, "mode=%d, scenario=%d, outdoor=%d, cabc=%d, %s\n",
 			mdnie->mode, mdnie->scenario, mdnie->outdoor,
 			mdnie->cabc, tune_dmb[mdnie->mode].name);
+#endif
 		goto etc;
 	}
 #endif
@@ -181,10 +183,11 @@ void set_mdnie_value(struct mdnie_info *mdnie, u8 force)
 	if (SCENARIO_IS_COLOR(mdnie->scenario)) {
 		idx = mdnie->scenario - COLOR_TONE_1;
 		mdnie_send_sequence(mdnie, tune_color_tone[idx].seq);
+#ifndef PRODUCT_SHIP
 		dev_info(mdnie->dev, "mode=%d, scenario=%d, outdoor=%d, cabc=%d, %s\n",
 			mdnie->mode, mdnie->scenario, mdnie->outdoor, mdnie->cabc,
 			tune_color_tone[idx].name);
-
+#endif
 		goto exit;
 	} else if ((mdnie->scenario == CAMERA_MODE) && (mdnie->outdoor == OUTDOOR_OFF)) {
 		mdnie_send_sequence(mdnie, tune_camera);
@@ -198,9 +201,11 @@ void set_mdnie_value(struct mdnie_info *mdnie, u8 force)
 		goto exit;
 	} else {
 		mdnie_send_sequence(mdnie, tunning_table[mdnie->cabc][mdnie->mode][mdnie->scenario].seq);
+#ifndef PRODUCT_SHIP
 		dev_info(mdnie->dev, "mode=%d, scenario=%d, outdoor=%d, cabc=%d, %s\n",
 			mdnie->mode, mdnie->scenario, mdnie->outdoor, mdnie->cabc,
 			tunning_table[mdnie->cabc][mdnie->mode][mdnie->scenario].name);
+#endif
 	}
 
 #if defined(CONFIG_TDMB) || defined(CONFIG_TARGET_LOCALE_NTT)

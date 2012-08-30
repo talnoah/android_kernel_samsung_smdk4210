@@ -443,11 +443,14 @@ static int m5mo_set_mode(struct v4l2_subdev *sd, u32 mode)
 		return err;
 
 	if (old_mode == mode) {
+		#ifndef PRODUCT_SHIP 
 		cam_dbg("%#x -> %#x\n", old_mode, mode);
+		#endif
 		return old_mode;
 	}
-
+#ifndef PRODUCT_SHIP
 	cam_dbg("%#x -> %#x\n", old_mode, mode);
+#endif
 
 	switch (old_mode) {
 	case M5MO_SYSINIT_MODE:

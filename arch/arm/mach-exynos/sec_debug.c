@@ -510,6 +510,11 @@ static void sec_debug_set_upload_cause(enum sec_debug_upload_cause_t type)
 	__raw_writel(type, S5P_INFORM4);
 	__raw_writel(type, S5P_INFORM6);
 
+#ifdef CONFIG_MACH_U1_NA_SPR
+	if (type == UPLOAD_CAUSE_CP_ERROR_FATAL)
+		*(unsigned int *)(SEC_DEBUG_MAGIC_VA + 0x4) = 0x51000004;
+#endif
+
 	pr_emerg("(%s) %x\n", __func__, type);
 }
 
@@ -671,7 +676,7 @@ int sec_debug_panic_handler_safe(void *buf)
 #ifdef CONFIG_SEC_DEBUG_FUPLOAD_DUMP_MORE
 static void dump_state_and_upload(void);
 #endif
-
+#if !defined(CONFIG_TARGET_LOCALE_NA)
 void sec_debug_check_crash_key(unsigned int code, int value)
 {
 	static bool volup_p;
@@ -741,6 +746,70 @@ void sec_debug_check_crash_key(unsigned int code, int value)
 	}
 }
 
+#else
+
+static struct hrtimer upload_start_timer;
+
+static enum hrtimer_restart force_upload_timer_func(struct hrtimer *timer)
+{
+	panic("Crash Key");
+
+	return HRTIMER_NORESTART;
+}
+
+/*  Volume UP + Volume Down = Force Upload Mode
+    1. check for VOL_UP and VOL_DOWN
+    2. if both key pressed start a timer with timeout period 3s
+    3. if any one of two keys is released before 3s disable timer. */
+void sec_debug_check_crash_key(unsigned int code, int value)
+{
+	static bool check;
+	static bool volup_p;
+	static bool voldown_p;
+	static const unsigned int VOLUME_UP = KEY_VOLUMEUP;
+	static const unsigned int VOLUME_DOWN = KEY_VOLUMEDOWN;
+	
+	if (!sec_debug_level.en.kernel_fault)
+		return;
+
+	if ((code == VOLUME_UP) || (code == VOLUME_DOWN)) {
+		if (value) {
+			if (code == VOLUME_UP)
+				volup_p = true;
+
+			if (code == VOLUME_DOWN)
+				voldown_p = true;
+
+			if (volup_p == true && voldown_p == true) {
+				hrtimer_start(&upload_start_timer,
+					      ktime_set(3, 0),
+					      HRTIMER_MODE_REL);
+				check = true;
+			}
+		} else {
+			if (volup_p == true)
+				volup_p = false;
+			if (voldown_p == true)
+				voldown_p = false;
+			if (check) {
+				hrtimer_cancel(&upload_start_timer);
+				check = 0;
+			}
+		}
+	}
+}
+
+static int __init upload_timer_init(void)
+{
+	hrtimer_init(&upload_start_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+	upload_start_timer.function = force_upload_timer_func;
+	return 0;
+}
+
+/* this should be initialized prior to keypad driver */
+early_initcall(upload_timer_init);
+
+#endif
 static struct notifier_block nb_reboot_block = {
 	.notifier_call = sec_debug_normal_reboot_handler
 };
