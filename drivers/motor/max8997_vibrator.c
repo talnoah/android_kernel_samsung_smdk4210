@@ -27,12 +27,11 @@
 #include "mach/gpio.h"
 #endif
 
+static int pwm_duty_max;
+static int pwm_duty_min;
+
 static unsigned long pwm_val = 50; /* duty in percent */
-#ifdef CONFIG_MACH_U1_NA_SPR
-static int pwm_duty = 38000; /* duty value, 50667=100% 38000=50%, 25334=0% */
-#else
-static int pwm_duty = 28230; /* duty value, 37640=100% 28230=50%, 18820=0% */
-#endif
+static int pwm_duty; /* duty value */
 
 struct vibrator_drvdata {
 	struct max8997_motor_data *pdata;
@@ -48,7 +47,7 @@ struct vibrator_drvdata {
 };
 
 #ifdef CONFIG_VIBETONZ
-struct vibrator_drvdata *g_data;
+static struct vibrator_drvdata *g_data;
 #endif
 
 static int vibetonz_clk_on(struct device *dev, bool en)
@@ -225,14 +224,13 @@ void vibtonz_pwm(int nForce)
 	}
 }
 EXPORT_SYMBOL(vibtonz_pwm);
-#endif
 
 static ssize_t pwm_val_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
 	int count;
 
-	pwm_val = ((pwm_duty - 18820) * 100) / 18820;
+	pwm_val = ((pwm_duty - pwm_duty_min) * 100) / pwm_duty_min;
 
 	count = sprintf(buf, "%lu\n", pwm_val);
 	pr_debug("[VIB] pwm_val: %lu\n", pwm_val);
@@ -249,25 +247,15 @@ ssize_t pwm_val_store(struct device *dev,
 
 	pr_info("[VIB] %s: pwm_val=%lu\n", __func__, pwm_val);
 
-#ifdef CONFIG_MACH_U1_NA_SPR
-        pwm_duty = (pwm_val * 25334) / 100 + 25334;
-
         /* make sure new pwm duty is in range */
-	if(pwm_duty > 50667) {
-		pwm_duty = 50667;
-	}
-	else if (pwm_duty < 25334) {
-		pwm_duty = 25334;
-	}
-#else
-        pwm_duty = (pwm_val * 18820) / 100 + 18820;
+	pwm_duty = (pwm_val * pwm_duty_min) / 100 + pwm_duty_min;
 
-        /* make sure new pwm duty is in range */
-	if(pwm_duty > 37640) {
-		pwm_duty = 37640;
+	/* make sure new pwm duty is in range */
+	if(pwm_duty > pwm_duty_max) {
+		pwm_duty = pwm_duty_max;
 	}
-	else if (pwm_duty < 18820) {
-		pwm_duty = 18820;
+	else if (pwm_duty < pwm_duty_min) {
+		pwm_duty = pwm_duty_min;
 	}
 #endif
 	pr_info("[VIB] %s: pwm_duty=%d\n", __func__, pwm_duty);
@@ -357,6 +345,9 @@ static int __devinit vibrator_probe(struct platform_device *pdev)
 
 #ifdef CONFIG_VIBETONZ
 	g_data = ddata;
+	pwm_duty_max = g_data->pdata->duty;
+	pwm_duty_min = pwm_duty_max/2;
+	pwm_duty = (pwm_duty_min + pwm_duty_max)/2;
 #endif
 
 	return 0;
