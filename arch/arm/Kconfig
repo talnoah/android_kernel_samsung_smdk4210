@@ -1841,7 +1841,7 @@ config CMDLINE_FROM_BOOTLOADER
 	  string provided in CMDLINE will be used.
 
 config CMDLINE_EXTEND
-	bool "Extend bootloader kernel arguments"
+  bool "Extend bootloader kernel arguments"
 	help
 	  The command-line arguments provided by the boot loader will be
 	  appended to the default kernel command string.
@@ -1854,6 +1854,12 @@ config CMDLINE_FORCE
 	  This is useful if you cannot or don't want to change the
 	  command-line options your boot loader passes to the kernel.
 endchoice
+
+config CMDLINE_APPEND_SERIAL
+	bool "Append device ID/Serial to the kernel arguments"	
+	help
+	  The device serial will be appended to the command-line provided
+          by the boot loader.
 
 config XIP_KERNEL
 	bool "Kernel Execute-In-Place from ROM"
