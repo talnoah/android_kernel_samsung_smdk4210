@@ -1471,7 +1471,7 @@ void __exit exit_j4fs_fs(void)
 	unregister_filesystem(&j4fs_fs_type);
 	destroy_inodecache();
 }
-
+MODULE_LICENSE("UNKNOWN");
 module_init(init_j4fs_fs)
 module_exit(exit_j4fs_fs)
 
