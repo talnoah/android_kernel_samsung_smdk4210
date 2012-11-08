@@ -1297,11 +1297,11 @@ static SINT32			McResCtrl_WaitEvent_AA				(UINT32 dEvent, UINT32 dParam);
 /****************************************************************************
  *	McDevIf_AllocPacketBuf_AA
  *
- *	�@�\:
- *			���W�X�^�ݒ�p�P�b�g�p�o�b�t�@�̊m��.
- *	����:
- *			�Ȃ�
- *	�߂�l:
+ *	@\:
+ *			WX^ÝèpPbgpobt@ÌmÛ.
+ *	ø:
+ *			Èµ
+ *	ßèl:
  *			MCDRV_SUCCESS
  *			MCDRV_ERROR
  *
@@ -1329,12 +1329,12 @@ SINT32	McDevIf_AllocPacketBuf_AA
 /****************************************************************************
  *	McDevIf_ReleasePacketBuf_AA
  *
- *	�@�\:
- *			���W�X�^�ݒ�p�P�b�g�p�o�b�t�@�̊J��.
- *	����:
- *			�Ȃ�
- *	�߂�l:
- *			�Ȃ�
+ *	@\:
+ *			WX^ÝèpPbgpobt@ÌJú.
+ *	ø:
+ *			Èµ
+ *	ßèl:
+ *			Èµ
  *
  ****************************************************************************/
 void	McDevIf_ReleasePacketBuf_AA
@@ -1348,12 +1348,12 @@ void	McDevIf_ReleasePacketBuf_AA
 /****************************************************************************
  *	McDevIf_ClearPacket_AA
  *
- *	�@�\:
- *			�p�P�b�g�̃N���A.
- *	����:
- *			�Ȃ�
- *	�߂�l:
- *			�Ȃ�
+ *	@\:
+ *			pPbgÌNA.
+ *	ø:
+ *			Èµ
+ *	ßèl:
+ *			Èµ
  *
  ****************************************************************************/
 void	McDevIf_ClearPacket_AA
@@ -1372,13 +1372,13 @@ void	McDevIf_ClearPacket_AA
 /****************************************************************************
  *	McDevIf_AddPacket_AA
  *
- *	�@�\:
- *			�p�P�b�g�ǉ�
- *	����:
- *			dDesc			�p�P�b�g���
- *			bData			�p�P�b�g�f�[�^
- *	�߂�l:
- *			�Ȃ�
+ *	@\:
+ *			pPbgÇÁ
+ *	ø:
+ *			dDesc			pPbgîñ
+ *			bData			pPbgf[^
+ *	ßèl:
+ *			Èµ
  *
  ****************************************************************************/
 void	McDevIf_AddPacket_AA
@@ -1416,14 +1416,14 @@ void	McDevIf_AddPacket_AA
 /****************************************************************************
  *	McDevIf_AddPacketRepeat_AA
  *
- *	�@�\:
- *			���ꃌ�W�X�^�ɌJ��Ԃ��f�[�^�Z�b�g����p�P�b�g��ǉ�
- *	����:
- *			dDesc			�p�P�b�g���
- *			pbData			�p�P�b�g�f�[�^�o�b�t�@�̃|�C���^
- *			wDataCount		�p�P�b�g�f�[�^��
- *	�߂�l:
- *			�Ȃ�
+ *	@\:
+ *			¯êWX^ÉJèÔµf[^Zbg·épPbgðÇÁ
+ *	ø:
+ *			dDesc			pPbgîñ
+ *			pbData			pPbgf[^obt@Ì|C^
+ *			wDataCount		pPbgf[^
+ *	ßèl:
+ *			Èµ
  *
  ****************************************************************************/
 void	McDevIf_AddPacketRepeat_AA
@@ -1444,11 +1444,11 @@ void	McDevIf_AddPacketRepeat_AA
 /****************************************************************************
  *	McDevIf_ExecutePacket_AA
  *
- *	�@�\:
- *			���W�X�^�ݒ�V�[�P���X�̎��s.
- *	����:
- *			�Ȃ�
- *	�߂�l:
+ *	@\:
+ *			WX^ÝèV[PXÌÀs.
+ *	ø:
+ *			Èµ
+ *	ßèl:
  *			MCDRV_SUCCESS
  *			MCDRV_ERROR_ARGUMENT
  *
