@@ -1256,7 +1256,7 @@ static SINT16 mc1n2_vol_micgain[] = {
 
 /* volmap for HP Gain Volume */
 static SINT16 mc1n2_vol_hpgain[] = {
-	0x0000, 0x0180, 0x0300, 0x0600,
+	0x0000, 0x0300, 0x0600, 0x0900, 0x0D80, 0x1201,
 };
 
 struct mc1n2_vreg_info mc1n2_vreg_map[MC1N2_N_VOL_REG] = {
@@ -2434,17 +2434,18 @@ static const DECLARE_TLV_DB_SCALE(mc1n2_tlv_micgain, 1500, 500, 0);
 
 static unsigned int mc1n2_tlv_hpsp[] = {
 	TLV_DB_RANGE_HEAD(5),
-	0, 2, TLV_DB_SCALE_ITEM(-4400, 800, 1),
-	2, 3, TLV_DB_SCALE_ITEM(-2800, 400, 0),
-	3, 7, TLV_DB_SCALE_ITEM(-2400, 200, 0),
-	7, 15, TLV_DB_SCALE_ITEM(-1600, 100, 0),
-	15, 31, TLV_DB_SCALE_ITEM(-800, 50, 0),
+	0, 2, TLV_DB_SCALE_ITEM(-2800, 400, 1),
+	2, 3, TLV_DB_SCALE_ITEM(-2000, 200, 0),
+	3, 7, TLV_DB_SCALE_ITEM(-1600, 100, 0),
+	7, 15, TLV_DB_SCALE_ITEM(-1200, 50, 0),
+        15, 31, TLV_DB_SCALE_ITEM(-800, 50, 0),
 };
 
 static unsigned int mc1n2_tlv_hpgain[] = {
-	TLV_DB_RANGE_HEAD(2),
-	0, 2, TLV_DB_SCALE_ITEM(0, 150, 0),
-	2, 3, TLV_DB_SCALE_ITEM(300, 300, 0),
+	TLV_DB_RANGE_HEAD(3),
+	0, 2, TLV_DB_SCALE_ITEM(0, 300, 0),
+	2, 3, TLV_DB_SCALE_ITEM(600, 300, 0),
+        3, 5, TLV_DB_SCALE_ITEM(900, 450, 0),
 };
 
 static const char *codec_status_control[] = {
