@@ -58,6 +58,8 @@
 #include <linux/android_pmem.h>
 #endif
 
+#include <linux/exynos_mem.h>
+
 #include <asm/mach/arch.h>
 #include <asm/mach-types.h>
 
@@ -6802,12 +6804,19 @@ static void __init exynos4_cma_region_reserve(struct cma_region *regions_normal,
 			if (!memblock_is_region_reserved(reg->start, reg->size)
 			    && memblock_reserve(reg->start, reg->size) >= 0)
 				reg->reserved = 1;
+                        pr_debug("S5P/CMA: Reserved 0x%08x/0x%08x for '%s'\n",
+                           reg->start, reg->size, reg->name);
+
+                        cma_region_descriptor_add(reg->name, reg->start, reg->size);
 		} else {
 			paddr = __memblock_alloc_base(reg->size, reg->alignment,
 						      MEMBLOCK_ALLOC_ACCESSIBLE);
 			if (paddr) {
 				reg->start = paddr;
 				reg->reserved = 1;
+                                pr_debug("S5P/CMA: Reserved 0x%08x/0x%08x for '%s'\n",
+                                  reg->start, reg->size, reg->name);
+                                cma_region_descriptor_add(reg->name, reg->start, reg->size);
 			}
 		}
 	}
@@ -6829,6 +6838,12 @@ static void __init exynos4_cma_region_reserve(struct cma_region *regions_normal,
 				reg->start = paddr;
 				reg->reserved = 1;
 				paddr += reg->size;
+				
+                                pr_info("S5P/CMA: "
+                                  "Reserved 0x%08x/0x%08x for '%s'\n",
+                                  reg->start, reg->size, reg->name);
+
+                                cma_region_descriptor_add(reg->name, reg->start, reg->size);
 
 				if (WARN_ON(cma_early_region_register(reg)))
 					memblock_free(reg->start, reg->size);
@@ -6868,14 +6883,12 @@ static void __init exynos4_reserve_mem(void)
 			.start = 0,
 		},
 #endif
-#ifndef CONFIG_ION_EXYNOS_CONTIGHEAP_SIZE
 #ifdef CONFIG_VIDEO_SAMSUNG_MEMSIZE_FIMC1
 		{
 			.name = "fimc1",
 			.size = CONFIG_VIDEO_SAMSUNG_MEMSIZE_FIMC1 * SZ_1K,
 			.start = 0,
 		},
-#endif
 #endif
 #ifdef CONFIG_VIDEO_SAMSUNG_MEMSIZE_FIMC2
 		{

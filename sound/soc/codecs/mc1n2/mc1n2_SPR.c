@@ -2460,87 +2460,87 @@ static const struct snd_kcontrol_new mc1n2_snd_controls[] = {
 	 * digital volumes and mute switches
 	 */
 	SOC_DOUBLE_TLV("AD Digital Volume",
-		       MC1N2_DVOL_AD0, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_AD0, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("AD Digital Switch",
 		   MC1N2_DVOL_AD0, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("AENG6 Volume",
-		       MC1N2_DVOL_AENG6, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_AENG6, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("AENG6 Switch",
 		   MC1N2_DVOL_AENG6, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("PDM Volume",
-		       MC1N2_DVOL_PDM, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_PDM, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("PDM Switch",
 		   MC1N2_DVOL_PDM, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("DIR#0 Volume",
-		       MC1N2_DVOL_DIR0, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_DIR0, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("DIR#0 Switch",
 		   MC1N2_DVOL_DIR0, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("DIR#1 Volume",
-		       MC1N2_DVOL_DIR1, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_DIR1, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("DIR#1 Switch",
 		   MC1N2_DVOL_DIR1, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("DIR#2 Volume",
-		       MC1N2_DVOL_DIR2, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_DIR2, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("DIR#2 Switch",
 		   MC1N2_DVOL_DIR2, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("AD ATT Volume",
-		       MC1N2_DVOL_AD0_ATT, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_AD0_ATT, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("AD ATT Switch",
 		   MC1N2_DVOL_AD0_ATT, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("DIR#0 ATT Volume",
-		       MC1N2_DVOL_DIR0_ATT, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_DIR0_ATT, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("DIR#0 ATT Switch",
 		   MC1N2_DVOL_DIR0_ATT, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("DIR#1 ATT Volume",
-		       MC1N2_DVOL_DIR1_ATT, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_DIR1_ATT, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("DIR#1 ATT Switch",
 		   MC1N2_DVOL_DIR1_ATT, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("DIR#2 ATT Volume",
-		       MC1N2_DVOL_DIR2_ATT, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_DIR2_ATT, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("DIR#2 ATT Switch",
 		   MC1N2_DVOL_DIR2_ATT, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("Side Tone Playback Volume",
-		       MC1N2_DVOL_SIDETONE, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_SIDETONE, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("Side Tone Playback Switch",
 		   MC1N2_DVOL_SIDETONE, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("Master Playback Volume",
-		       MC1N2_DVOL_DAC_MASTER, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_DAC_MASTER, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("Master Playback Switch",
 		   MC1N2_DVOL_DAC_MASTER, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("Voice Playback Volume",
-		       MC1N2_DVOL_DAC_VOICE, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_DAC_VOICE, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("Voice Playback Switch",
 		   MC1N2_DVOL_DAC_VOICE, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("DAC Playback Volume",
-		       MC1N2_DVOL_DAC_ATT, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_DAC_ATT, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("DAC Playback Switch",
 		   MC1N2_DVOL_DAC_ATT, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("DIT#0 Capture Volume",
-		       MC1N2_DVOL_DIT0, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_DIT0, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("DIT#0 Capture Switch",
 		   MC1N2_DVOL_DIT0, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("DIT#1 Capture Volume",
-		       MC1N2_DVOL_DIT1, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_DIT1, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("DIT#1 Capture Switch",
 		   MC1N2_DVOL_DIT1, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("DIT#2 Capture Volume",
-		       MC1N2_DVOL_DIT2, 0, 8, 93, 0, mc1n2_tlv_digital),
+		       MC1N2_DVOL_DIT2, 5, 8, 93, 0, mc1n2_tlv_digital),
 	SOC_DOUBLE("DIT#2 Capture Switch",
 		   MC1N2_DVOL_DIT2, 7, 15, 1, 0),
 
@@ -2548,66 +2548,66 @@ static const struct snd_kcontrol_new mc1n2_snd_controls[] = {
 	 * analog volumes and mute switches
 	 */
 	SOC_DOUBLE_TLV("AD Analog Volume",
-		       MC1N2_AVOL_AD0, 0, 8, 31, 0, mc1n2_tlv_adc),
+		       MC1N2_AVOL_AD0, 5, 8, 31, 0, mc1n2_tlv_adc),
 	SOC_DOUBLE("AD Analog Switch",
 		   MC1N2_AVOL_AD0, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("Line Bypass Playback Volume",
-		       MC1N2_AVOL_LIN1, 0, 8, 31, 0, mc1n2_tlv_ain),
+		       MC1N2_AVOL_LIN1, 5, 8, 31, 0, mc1n2_tlv_ain),
 	SOC_DOUBLE("Line Bypass Playback Switch",
 		   MC1N2_AVOL_LIN1, 7, 15, 1, 0),
 
 	SOC_SINGLE_TLV("Mic 1 Bypass Playback Volume",
-		       MC1N2_AVOL_MIC1, 0, 31, 0, mc1n2_tlv_ain),
+		       MC1N2_AVOL_MIC1, 5, 31, 0, mc1n2_tlv_ain),
 	SOC_SINGLE("Mic 1 Bypass Playback Switch",
 		   MC1N2_AVOL_MIC1, 7, 1, 0),
 
 	SOC_SINGLE_TLV("Mic 2 Bypass Playback Volume",
-		       MC1N2_AVOL_MIC2, 0, 31, 0, mc1n2_tlv_ain),
+		       MC1N2_AVOL_MIC2, 5, 31, 0, mc1n2_tlv_ain),
 	SOC_SINGLE("Mic 2 Bypass Playback Switch",
 		   MC1N2_AVOL_MIC2, 7, 1, 0),
 
 	SOC_SINGLE_TLV("Mic 3 Bypass Playback Volume",
-		       MC1N2_AVOL_MIC3, 0, 31, 0, mc1n2_tlv_ain),
+		       MC1N2_AVOL_MIC3, 5, 31, 0, mc1n2_tlv_ain),
 	SOC_SINGLE("Mic 3 Bypass Playback Switch",
 		   MC1N2_AVOL_MIC3, 7, 1, 0),
 
 	SOC_DOUBLE_TLV("Headphone Playback Volume",
-		       MC1N2_AVOL_HP, 0, 8, 31, 0, mc1n2_tlv_hpsp),
+		       MC1N2_AVOL_HP, 5, 8, 31, 0, mc1n2_tlv_hpsp),
 	SOC_DOUBLE("Headphone Playback Switch",
 		   MC1N2_AVOL_HP, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("Speaker Playback Volume",
-		       MC1N2_AVOL_SP, 0, 8, 31, 0, mc1n2_tlv_hpsp),
+		       MC1N2_AVOL_SP, 5, 8, 31, 0, mc1n2_tlv_hpsp),
 	SOC_DOUBLE("Speaker Playback Switch",
 		   MC1N2_AVOL_SP, 7, 15, 1, 0),
 
 	SOC_SINGLE_TLV("Receiver Playback Volume",
-		       MC1N2_AVOL_RC, 0, 31, 0, mc1n2_tlv_hpsp),
+		       MC1N2_AVOL_RC, 5, 31, 0, mc1n2_tlv_hpsp),
 	SOC_SINGLE("Receiver Playback Switch",
 		   MC1N2_AVOL_RC, 7, 1, 0),
 
 	SOC_DOUBLE_TLV("Line 1 Playback Volume",
-		       MC1N2_AVOL_LOUT1, 0, 8, 31, 0, mc1n2_tlv_aout),
+		       MC1N2_AVOL_LOUT1, 5, 8, 31, 0, mc1n2_tlv_aout),
 	SOC_DOUBLE("Line 1 Playback Switch",
 		   MC1N2_AVOL_LOUT1, 7, 15, 1, 0),
 
 	SOC_DOUBLE_TLV("Line 2 Playback Volume",
-		       MC1N2_AVOL_LOUT2, 0, 8, 31, 0, mc1n2_tlv_aout),
+		       MC1N2_AVOL_LOUT2, 5, 8, 31, 0, mc1n2_tlv_aout),
 	SOC_DOUBLE("Line 2 Playback Switch",
 		   MC1N2_AVOL_LOUT2, 7, 15, 1, 0),
 
 	SOC_SINGLE_TLV("Mic 1 Gain Volume",
-		       MC1N2_AVOL_MIC1_GAIN, 0, 3, 0, mc1n2_tlv_micgain),
+		       MC1N2_AVOL_MIC1_GAIN, 5, 3, 0, mc1n2_tlv_micgain),
 
 	SOC_SINGLE_TLV("Mic 2 Gain Volume",
-		       MC1N2_AVOL_MIC2_GAIN, 0, 3, 0, mc1n2_tlv_micgain),
+		       MC1N2_AVOL_MIC2_GAIN, 5, 3, 0, mc1n2_tlv_micgain),
 
 	SOC_SINGLE_TLV("Mic 3 Gain Volume",
-		       MC1N2_AVOL_MIC3_GAIN, 0, 3, 0, mc1n2_tlv_micgain),
+		       MC1N2_AVOL_MIC3_GAIN, 5, 3, 0, mc1n2_tlv_micgain),
 
 	SOC_SINGLE_TLV("HP Gain Playback Volume",
-		       MC1N2_AVOL_HP_GAIN, 0, 3, 0, mc1n2_tlv_hpgain),
+		       MC1N2_AVOL_HP_GAIN, 5, 3, 0, mc1n2_tlv_hpgain),
 
 	SOC_ENUM_EXT("Codec Status", path_control_enum[0],
 				mc1n2_get_codec_status, mc1n2_set_codec_status),
